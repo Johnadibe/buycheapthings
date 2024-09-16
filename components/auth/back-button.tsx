@@ -6,8 +6,8 @@ import Link from "next/link"
 
 export const BackButton = ({href, label} : {href: string, label: string}) => {
     return (
-        <div>
-            <Button className="font-medium w-full">
+        <div className="flex justify-center font-medium w-full">
+            <Button variant={"link"} className="w-full">
                 <Link aria-label={label} href={href}>{label}</Link>
             </Button>
         </div>
