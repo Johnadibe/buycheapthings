@@ -15,6 +15,20 @@
       "when": 1726141484571,
       "tag": "0001_optimal_gravity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726513398461,
+      "tag": "0002_worthless_cardiac",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1726513472155,
+      "tag": "0003_spicy_cobalt_man",
+      "breakpoints": true
     }
   ]
 }
