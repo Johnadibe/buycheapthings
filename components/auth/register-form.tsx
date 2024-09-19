@@ -34,7 +34,7 @@ export const RegisterForm = () => {
     const {execute, status} = useAction(emailRegister, {
         onSuccess(data) {
             if(data.error) setError(data.error)
-            if(data.success) setError(data.success)
+            if(data.success) setSuccess(data.success)
         }
     })
 
