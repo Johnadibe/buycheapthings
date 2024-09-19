@@ -7,6 +7,7 @@ import { db } from ".."
 import { eq } from "drizzle-orm"
 import { users } from "../schema"
 import { generateEmailVerificationToken } from "./tokens"
+import { sendVerificationEmail } from "./email"
 
 const action = createSafeActionClient()
 
@@ -24,7 +25,7 @@ export const emailRegister = action(RegisterSchema, async ({ email, password, na
     if (existingUser) {
         if(!existingUser.emailVerified) {
              const verificationToken = await generateEmailVerificationToken(email) // we will make a token that will be sent to the email and it needs to ne saved to our database with the user that made the request.
-            //  await sendVerificationEmail() // we will send a verification email using resend library
+            await sendVerificationEmail(verificationToken[0].email, verificationToken[0].token) // we will send a verification email using resend library
 
              return { success: "Email Confimation resent"}
         }
@@ -39,7 +40,7 @@ export const emailRegister = action(RegisterSchema, async ({ email, password, na
 
     // Get the email verification token and send the email after the register
     const verificationToken = await generateEmailVerificationToken(email)
-    // await sendVerificationEmail()
+    await sendVerificationEmail(verificationToken[0].email, verificationToken[0].token)
 
     return { success: "Confirmation Email Sent!"}
 }
