@@ -57,6 +57,13 @@
       "when": 1726737013179,
       "tag": "0007_narrow_cerebro",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1726861335427,
+      "tag": "0008_curvy_northstar",
+      "breakpoints": true
     }
   ]
 }
