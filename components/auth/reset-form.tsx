@@ -13,27 +13,24 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { FormSuccess } from "./form-success"
 import { FormError } from "./form-error"
-import { NewPasswordSchema } from "@/types/new-password-schema"
 import { newPassword } from "@/server/actions/new-password"
-import { useSearchParams } from "next/navigation"
+import { ResetSchema } from "@/types/reset-schema"
+import { passwordReset } from "@/server/actions/password-reset"
 
-export const NewPasswordForm = () => {
-    const form = useForm<z.infer<typeof NewPasswordSchema>>({
-        resolver: zodResolver(NewPasswordSchema),
+export const ResetForm = () => {
+    const form = useForm<z.infer<typeof ResetSchema>>({
+        resolver: zodResolver(ResetSchema),
         defaultValues: {
-            password: "", 
+            email: "", 
         }
     });
-
-    // grab the token from the url using useSearchParams
-    const token = useSearchParams().get("token")
 
     // create a state for error and success
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
 
     // using the new-password.ts action
-    const {execute, status} = useAction(newPassword, {
+    const {execute, status} = useAction(passwordReset, {
         onSuccess(data){
             if(data?.error) setError(data.error)
             if(data?.success) setSuccess(data.success)
@@ -41,12 +38,12 @@ export const NewPasswordForm = () => {
     })
 
     // create onSubmit function
-    const onSubmit = (values: z.infer<typeof NewPasswordSchema>) => {
+    const onSubmit = (values: z.infer<typeof ResetSchema>) => {
         // do something with the form values
-        execute( {password: values.password, token} )
+        execute(values)
     }
     return (
-        <AuthCard cardTitle="Enter a new password" backButtonHref="/auth/login" backButtonLabel="Back to login" showSocials>
+        <AuthCard cardTitle="Forgot your password?" backButtonHref="/auth/login" backButtonLabel="Back to login" showSocials>
             <div>
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -55,13 +52,13 @@ export const NewPasswordForm = () => {
   {/* Password */}
   <FormField
     control={form.control}
-    name="password"
+    name="email"
     render={({field}) => (
       <FormItem>
-        <FormLabel>Password</FormLabel>
+        <FormLabel>Email</FormLabel>
         <FormControl>
           { /* Your form field */}
-          <Input placeholder="*********" {...field} type="password" autoComplete="current-password" disabled={status === "executing"}/>
+          <Input placeholder="johnadibe123@gmail.com" {...field} type="email" autoComplete="email" disabled={status === "executing"}/>
         </FormControl>
         <FormDescription />
         <FormMessage />

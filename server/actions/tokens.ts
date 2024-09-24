@@ -69,13 +69,53 @@ export const newVerification = async (token: string) => {
     return { success: "Email verified"}
 }
 
-// 
+// get the password reset token in the database using the token
 export const getPasswordResetTokenByToken = async (token: string) => {
     try {
         const passwordResetToken = await db.query.passwordResetTokens.findFirst({
             where: eq(passwordResetTokens.token, token)
         })
         return passwordResetToken
+    } catch {
+        return null
+    }
+}
+
+// get password rest token by email
+export const getPasswordResetTokenByEmail = async (email: string) => {
+    try {
+        const passwordResetToken = await db.query.passwordResetTokens.findFirst({
+            where: eq(passwordResetTokens.email, email)
+        })
+        return passwordResetToken
+    } catch {
+        return null
+    }
+}
+// generate token for password reset
+export const generatePasswordResetToken = async (email: string) => {
+    try {
+        // generate the token 
+    const token = crypto.randomUUID()
+    
+    // expires 
+    const expires = new Date(new Date().getTime() + 3600 * 1000)
+
+    // if we have an existing token then delete it, get password reset token by email
+    const existingToken = await getPasswordResetTokenByEmail(email)
+    if(existingToken) {
+        await db.delete(passwordResetTokens).where(eq(passwordResetTokens.id, existingToken.id))
+    }
+
+    // insert the values of the passwordresettokens in the database
+    const passwordResetToken = await db.insert(passwordResetTokens).values({
+        email,
+        token,
+        expires,
+    }).returning()
+
+        // return the password reset token
+    return passwordResetToken 
     } catch {
         return null
     }

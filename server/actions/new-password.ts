@@ -7,10 +7,14 @@ import { db } from "..";
 import { eq } from "drizzle-orm";
 import { passwordResetTokens, users } from "../schema";
 import bcrypt from "bcrypt"
+import { Pool } from "@neondatabase/serverless"
+import { drizzle } from "drizzle-orm/neon-serverless";
 
 const action = createSafeActionClient();
 
 export const newPassword = action(NewPasswordSchema, async ({password, token}) => {
+   const pool = new Pool({connectionString: process.env.POSTGRES_URL})
+   const dbPool = drizzle(pool)
     // check the token, if they (users) dont have the token they shouldnt be allowed to change the password
     if(!token) {
         return { error: "Missing Token" }
@@ -43,7 +47,7 @@ export const newPassword = action(NewPasswordSchema, async ({password, token}) =
     // we need to do two things here
     // we need to essentially set the new password but also delete the token from the database. The way we can do that is by using a transaction. A transaction  is a collection of either queries or posts, whether you are fetching or updating from the database
     // Lets ay you have like 3 things to do and all must go true
-    await db.transaction(async (tx) => {
+    await dbPool.transaction(async (tx) => {
         await tx.update(users).set({
             password: hashedPassword
         }).where(eq(users.id, existingUser.id))
