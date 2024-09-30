@@ -12,8 +12,10 @@ import Logo from "./logo";
     return (
         <header className="py-8">
             <nav>
-                <ul className="flex justify-between">
-                    <Link href={"/"}><Logo /></Link>
+                <ul className="flex justify-between items-center">
+                    <li>
+                    <Link href="/" aria-label="sprout and scribble logo"><Logo /></Link>
+                    </li>
                     {!session ? (
                         <li>
                             <Button asChild>
