@@ -4,6 +4,7 @@ import "./globals.css";
 
 import Nav from "@/components/navigation/nav";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -14,22 +15,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-  profile,
 }: Readonly<{
   children: React.ReactNode,
   profile: React.ReactNode
 }>) {
-  // const isAdmin = true;
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={cn("px-6 md:px-24 max-w-7xl mx-auto", `${inter.className}`)}
       >
-        <div>
-        <Nav />
+        <ThemeProvider attribute="class"
+            defaultTheme="system"
+            enableSystem>
+          <Nav />
         {children}
-        </div>
-        {/* {isAdmin && profile} Dynamically render a component based on condition */}
+        </ThemeProvider>
       </body>
     </html>
   );
