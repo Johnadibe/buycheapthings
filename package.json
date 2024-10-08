@@ -27,7 +27,7 @@
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.33.0",
     "lucide-react": "^0.439.0",
-    "next": "14.2.9",
+    "next": "^14.2.13",
     "next-auth": "^5.0.0-beta.16",
     "next-safe-action": "^6.2.0",
     "next-themes": "^0.3.0",
@@ -42,9 +42,11 @@
     "zod": "^3.23.8"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "bcryptjs": "^2.4.3",
     "drizzle-kit": "^0.24.2",
     "eslint": "^8",
     "eslint-config-next": "14.2.9",
