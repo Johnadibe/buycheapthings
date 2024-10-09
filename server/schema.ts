@@ -82,6 +82,7 @@ export const twoFactorTokens = pgTable("two_factor_tokens",  {
     token: text("token").notNull(),
     expires: timestamp("expires", { mode: "date" }).notNull(),
     email: text("email").notNull(),
+    userID: text("userID").references(() => users.id, { onDelete: "cascade" }),
   },
   (verificationToken) => ({
     compositePk: primaryKey({
@@ -89,8 +90,3 @@ export const twoFactorTokens = pgTable("two_factor_tokens",  {
     }),
   })
 )
-//   import { pgTable, serial, text } from "drizzle-orm/pg-core";
-// export const posts = pgTable("posts", {
-//     id: serial('id').primaryKey().notNull(),
-//     title: text("title").notNull(),
-// })

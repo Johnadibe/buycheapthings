@@ -30,12 +30,12 @@ export const settings = action(SettingsSchema, async (values) => {
         values.email = undefined
         values.password = undefined
         values.newPassword = undefined
-        values.image = undefined
+        values.isTwoFactorEnabled = undefined
     }
 
     // we compare the passwords
     if(values.password && values.newPassword && dbUser.password) {
-        const passwordMatch = bcrypt.compare(values.password, dbUser.password)
+        const passwordMatch = await bcrypt.compare(values.password, dbUser.password)
         if(!passwordMatch) {
             return {error: "Password does not match"}
         }
@@ -53,6 +53,7 @@ export const settings = action(SettingsSchema, async (values) => {
 
      // update the user after that
         const updatedUser = await db.update(users).set({
+            twoFactorEnabled: values.isTwoFactorEnabled,
             name: values.name,
             email: values.email,
             password: values.password,

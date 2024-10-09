@@ -70,11 +70,11 @@ export const NewPasswordForm = () => {
   />
   <FormSuccess message={success}/>
   <FormError message={error} />
-  <Button variant={"link"} size={"sm"}>
+  <Button variant={"link"} className="px-0" size={"sm"}>
     <Link href="/auth/reset">Forgot your password?</Link>
   </Button>
                         </div>
-  <Button type="submit" className={cn("w-full", status === "executing" ? "animate-pulse" : "")}>Reset Password</Button>
+  <Button type="submit" className={cn("w-full my-4", status === "executing" ? "animate-pulse" : "")}>Reset Password</Button>
                     </form>
                 </Form>
             </div>

@@ -15,9 +15,16 @@ import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { FormSuccess } from "./form-success"
 import { FormError } from "./form-error"
+import {
+  InputOTP,
+  InputOTPGroup,
+  InputOTPSeparator,
+  InputOTPSlot,
+} from "@/components/ui/input-otp"
+
 
 export const LoginForm = () => {
-    const form = useForm({
+    const form = useForm<z.infer<typeof LoginSchema>>({
         resolver: zodResolver(LoginSchema),
         defaultValues: {
             email: "",
@@ -28,12 +35,14 @@ export const LoginForm = () => {
     // create a state for error and success
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
+    const [showTwoFactor, setShowTwoFactor] = useState(false)
 
     // using the email-signin action
     const {execute, status} = useAction(emailSignIn, {
         onSuccess(data){
             if(data?.error) setError(data.error)
             if(data?.success) setSuccess(data.success)
+              if(data.twoFactor) setShowTwoFactor(true)
         }
     })
 
@@ -48,6 +57,34 @@ export const LoginForm = () => {
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <div>
+                          {showTwoFactor && (
+                            <FormField
+    control={form.control}
+    name="code"
+    render={({field}) => (
+      <FormItem>
+        <FormLabel>We've sent you a two factor code to your email.</FormLabel>
+        <FormControl>
+          { /* Your form field */}
+          <InputOTP disabled={status === "executing"} {...field} maxLength={6}>
+             <InputOTPGroup>
+               <InputOTPSlot index={0}/>
+               <InputOTPSlot index={1}/>
+               <InputOTPSlot index={2}/>
+               <InputOTPSlot index={3}/>
+               <InputOTPSlot index={4}/>
+               <InputOTPSlot index={5}/>
+             </InputOTPGroup>
+          </InputOTP>
+        </FormControl>
+        <FormDescription />
+        <FormMessage />
+      </FormItem>
+    )}
+  />
+                          )}
+                          {!showTwoFactor && (
+                          <>
                            <FormField
     control={form.control}
     name="email"
@@ -80,13 +117,15 @@ export const LoginForm = () => {
       </FormItem>
     )}
   />
+  </>
+  )}
   <FormSuccess message={success}/>
   <FormError message={error} />
   <Button variant={"link"} size={"sm"}>
     <Link href="/auth/reset">Forgot your password?</Link>
   </Button>
                         </div>
-  <Button type="submit" className={cn("w-full", status === "executing" ? "animate-pulse" : "")}>{"Login"}</Button>
+  <Button type="submit" className={cn("w-full", status === "executing" ? "animate-pulse" : "")}>{showTwoFactor ? "Verify" : "Sign In"}</Button>
                     </form>
                 </Form>
             </div>
