@@ -6,6 +6,8 @@ import {
     integer,
     boolean,
     pgEnum,
+    serial,
+    real,
   } from "drizzle-orm/pg-core"
   import type { AdapterAccount } from "next-auth/adapters"
   import {createId} from "@paralleldrive/cuid2"
@@ -90,3 +92,11 @@ export const twoFactorTokens = pgTable("two_factor_tokens",  {
     }),
   })
 )
+
+export const products = pgTable("products", {
+  id: serial("id").primaryKey(), // This is going to be incrementing like 1, 2, 3, 4, ...
+  description: text("description").notNull(),
+  title: text("title").notNull(),
+  created: timestamp("created").defaultNow(),
+  price: real("price").notNull(),
+})
