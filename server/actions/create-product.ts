@@ -24,7 +24,7 @@ export const createProduct = action(productSchema, async ({ id, title, descripti
             const newProduct = await db.insert(products).values({ title, description, price }).returning()
             return { success: `Product ${newProduct[0].title} has been created`}
         }
-    } catch (error) {
-        return { error: JSON.stringify(error) }
+    } catch (err) {
+        return { error: "Failed to create product" }
     }
 })
