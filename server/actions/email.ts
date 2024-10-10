@@ -11,7 +11,7 @@ export const sendVerificationEmail = async (email: string, token: string) => {
     const { data, error } = await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Baskity - Confirmation Email",
+        subject: "BuyCheapThings - Confirmation Email",
         html: `<p>Click to <a href='${confirmLink}'>confirm your email</a></p>`
     });
 
@@ -25,7 +25,7 @@ export const sendPasswordResetEmail = async (email: string, token: string) => {
     const { data, error } = await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Sprout Scribble - Confirmation Email",
+        subject: "BuyCheapThings - Confirmation Email",
         html: `<p>Click here <a href='${confirmLink}'>reset your password</a></p>`
     });
 
@@ -38,7 +38,7 @@ export const sendTwoFactorByTokenEmail = async (email: string, token: string) =>
     const { data, error } = await resend.emails.send({
         from: "onboarding@resend.dev",
         to: email,
-        subject: "Sprout Scribble - Your Two Factor Token",
+        subject: "BuyCheapThings - Your Two Factor Token",
         html: `<p>Your Confirmation Code: ${token}</p>`
     });
 

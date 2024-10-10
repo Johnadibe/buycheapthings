@@ -44,7 +44,6 @@ export default async function DashboardLayout({children}: {children: React.React
     return (
         <div>
             <DashboardNav allLinks={allLinks} />
-            <h1>Layout</h1>
             {children}
         </div>
     )

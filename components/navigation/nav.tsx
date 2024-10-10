@@ -13,7 +13,8 @@ import Logo from "./logo";
             <nav>
                 <ul className="flex justify-between items-center">
                     <li>
-                    <Link href="/" aria-label="sprout and scribble logo"><Logo /></Link>
+                    <Link href="/" aria-label="jecspace logo" className="text-lg md:text-2xl font-bold tracking-widest">BuyCheap<span className="italic text-primary">Things</span></Link>
+
                     </li>
                     {!session ? (
                         <li>
