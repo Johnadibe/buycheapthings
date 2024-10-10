@@ -13,8 +13,6 @@ const Tiptap = ({val}: {val: string}) => {
     extensions: [
         Placeholder.configure({
             placeholder: 'Add a longer description for your product',
-             emptyNodeClass:
-    'first:before:text-gray-600 first:before:float-left first:before:content-[attr(data-placeholder)] first:before:pointer-events-none',
         }),
         StarterKit.configure({
             orderedList: {
