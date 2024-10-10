@@ -27,8 +27,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useAction } from "next-safe-action/hooks"
 import { createProduct } from "@/server/actions/create-product"
 import { z } from "zod"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
+import { getProduct } from "@/server/actions/get-product"
+import { useEffect } from "react"
 
 export default function ProductForm(){
 
@@ -45,6 +47,36 @@ export default function ProductForm(){
     // redirect a user
     const router = useRouter()
 
+    // get the id from the search route
+    const searchParams = useSearchParams()
+    const editMode = searchParams.get("id")
+
+    // A function to check if the product exist or not
+    const checkProduct = async (id: number) => {
+      if(editMode) {
+        const data = await getProduct(id)
+        if(data.error) {
+          toast.error(data.error)
+          router.push("/dashboard/products")
+          return
+        }
+        if(data.success) {
+          const id = parseInt(editMode)
+          form.setValue("title", data.success.title)
+          form.setValue("description", data.success.description)
+          form.setValue("price", data.success.price)
+          form.setValue("id", data.success.id)
+        }
+      }
+    }
+
+    // 
+    useEffect(() => {
+      if(editMode) {
+        checkProduct(parseInt(editMode))
+      }
+    }, [])
+
     // 
     const { execute, status } = useAction(createProduct, {
       onSuccess: (data) => {
@@ -57,7 +89,8 @@ export default function ProductForm(){
         }
       },
       onExecute: (data) => {
-        toast.loading("Creating Product")
+        if(editMode) toast.loading("Editing Product")
+        if(!editMode) toast.loading("Creating Product")
       },
     })
 
@@ -69,8 +102,8 @@ export default function ProductForm(){
     return (
        <Card>
   <CardHeader>
-    <CardTitle>Card Title</CardTitle>
-    <CardDescription>Card Description</CardDescription>
+    <CardTitle>{editMode ? "Edit Product": "Create Product"}</CardTitle>
+    <CardDescription>{editMode ? "Make changes to existing product" : "Add a new product"}</CardDescription>
   </CardHeader>
   <CardContent>
     <Form {...form}>
@@ -120,13 +153,10 @@ export default function ProductForm(){
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit" disabled={status === "executing" || !form.formState.isValid || !form.formState.isDirty}>Submit</Button>
+        <Button className="w-full" type="submit" disabled={status === "executing" || !form.formState.isValid || !form.formState.isDirty}>{editMode ? "Save Changes" : "Create Product"}</Button>
       </form>
     </Form>
   </CardContent>
-  <CardFooter>
-    <p>Card Footer</p>
-  </CardFooter>
 </Card>
     )
 }
