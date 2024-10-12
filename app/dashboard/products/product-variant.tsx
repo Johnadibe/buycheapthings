@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { variantSchema } from "@/types/variant-schema"
 import { z } from "zod"
+import { InputTags } from "./input-tags"
 
 export default function ProductVariant({ editMode, productID, variant, children }: { editMode: boolean, productID?: number, variant?: VariantsWithImagesTags, children: React.ReactNode }) {
     const form = useForm<z.infer<typeof variantSchema>>({
@@ -95,7 +96,7 @@ export default function ProductVariant({ editMode, productID, variant, children 
                                 <FormItem>
                                     <FormLabel>Tags</FormLabel>
                                     <FormControl>
-                                        {/* <InputTags /> */}
+                                        <InputTags {...field} onChange={(e) => field.onChange(e)} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
