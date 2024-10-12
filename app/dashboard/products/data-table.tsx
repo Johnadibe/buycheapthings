@@ -59,6 +59,7 @@ export function DataTable<TData, TValue>({
 
     return (
         <div className="rounded-md border">
+            {/* card from shadcn */}
             <Card>
                 <CardHeader>
                     <CardTitle>Your Products</CardTitle>
@@ -66,7 +67,7 @@ export function DataTable<TData, TValue>({
                 </CardHeader>
                 <CardContent>
                     <div>
-                        {/* This div here for filtering */}
+                        {/* This div here for filtering input */}
                         <div>
                             <Input placeholder="Filter Product" value={(table.getColumn("title")?.getFilterValue() as string) ?? ""} onChange={(event) => table.getColumn("title")?.setFilterValue(event.target.value)} />
                         </div>
