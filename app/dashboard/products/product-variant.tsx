@@ -25,8 +25,9 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { variantSchema } from "@/types/variant-schema"
 import { z } from "zod"
 import { InputTags } from "./input-tags"
+import VariantImages from "./variant-images"
 
-export default function ProductVariant({ editMode, productID, variant, children }: { editMode: boolean, productID?: number, variant?: VariantsWithImagesTags, children: React.ReactNode }) {
+export const ProductVariant = ({ editMode, productID, variant, children }: { editMode: boolean, productID?: number, variant?: VariantsWithImagesTags, children: React.ReactNode }) => {
     const form = useForm<z.infer<typeof variantSchema>>({
         resolver: zodResolver(variantSchema),
         defaultValues: {
@@ -51,7 +52,7 @@ export default function ProductVariant({ editMode, productID, variant, children 
         // render dialog component from shadcn
         <Dialog>
             <DialogTrigger>{children}</DialogTrigger>
-            <DialogContent>
+            <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-[620px] rounded-md">
                 <DialogHeader>
                     <DialogTitle>{editMode ? "Edit" : "Create"} your variant</DialogTitle>
                     <DialogDescription>
@@ -102,7 +103,7 @@ export default function ProductVariant({ editMode, productID, variant, children 
                                 </FormItem>
                             )}
                         />
-                        {/* <VariantImages /> */}
+                        <VariantImages />
                         {editMode && variant && (
                             <Button type="button" onClick={(e) => e.preventDefault()}>
                                 Delete Variant
