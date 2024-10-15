@@ -1,6 +1,6 @@
 "use client"
 
-import { productsWithVariants, VariantsWithImagesTags } from "@/lib/infer-type"
+import { VariantsWithImagesTags } from "@/lib/infer-type"
 import {
     Dialog,
     DialogContent,
@@ -22,14 +22,18 @@ import {
 import { Input } from "@/components/ui/input"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { variantSchema } from "@/types/variant-schema"
+import { VariantSchema } from "@/types/variant-schema"
 import { z } from "zod"
 import { InputTags } from "./input-tags"
 import VariantImages from "./variant-images"
+import { useAction } from "next-safe-action/hooks"
+import { createVariant } from "@/server/actions/create-variant"
+import { toast } from "sonner"
+import { useEffect, useState } from "react"
 
 export const ProductVariant = ({ editMode, productID, variant, children }: { editMode: boolean, productID?: number, variant?: VariantsWithImagesTags, children: React.ReactNode }) => {
-    const form = useForm<z.infer<typeof variantSchema>>({
-        resolver: zodResolver(variantSchema),
+    const form = useForm<z.infer<typeof VariantSchema>>({
+        resolver: zodResolver(VariantSchema),
         defaultValues: {
             tags: [],
             variantImages: [],
@@ -41,16 +45,63 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
         },
     })
 
+    const [open, setOpen] = useState(false)
+
+    // Edit
+    const setEdit = () => {
+        if (!editMode) {
+            form.reset()
+            return
+        }
+        if (editMode && variant) {
+            form.setValue("editMode", true)
+            form.setValue("id", variant.id)
+            form.setValue("productID", variant.productID)
+            form.setValue("productType", variant.productType)
+            form.setValue("color", variant.color)
+            form.setValue("tags", variant.variantTags.map((tag) => tag.tag))
+            form.setValue(
+                "variantImages",
+                variant.variantImages.map((img) => ({
+                    name: img.name,
+                    size: img.size,
+                    url: img.url,
+                }))
+            )
+        }
+    }
+
+    useEffect(() => {
+        setEdit()
+    }, [variant])
+
+    //
+    const { execute, status } = useAction(createVariant, {
+        onExecute() {
+            toast.loading("Creating variant", { duration: 1 })
+            setOpen(false)
+        },
+        onSuccess(data) {
+            if (data?.error) {
+                toast.error(data.error)
+            }
+            if (data?.success) {
+                toast.success(data.success)
+            }
+        }
+    })
+
     // onSubmit handler
-    function onSubmit(values: z.infer<typeof variantSchema>) {
+    function onSubmit(values: z.infer<typeof VariantSchema>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
         console.log(values)
+        execute(values)
     }
 
     return (
         // render dialog component from shadcn
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger>{children}</DialogTrigger>
             <DialogContent className="lg:max-w-screen-lg overflow-y-scroll max-h-[620px] rounded-md">
                 <DialogHeader>
@@ -104,12 +155,14 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
                             )}
                         />
                         <VariantImages />
-                        {editMode && variant && (
-                            <Button type="button" onClick={(e) => e.preventDefault()}>
-                                Delete Variant
-                            </Button>
-                        )}
-                        <Button type="submit">{editMode ? "Update Variant" : "Create Variant"}</Button>
+                        <div className="flex gap-4 items-center justify-center">
+                            {editMode && variant && (
+                                <Button variant={"destructive"} type="button" onClick={(e) => e.preventDefault()}>
+                                    Delete Variant
+                                </Button>
+                            )}
+                            <Button type="submit">{editMode ? "Update Variant" : "Create Variant"}</Button>
+                        </div>
                     </form>
                 </Form>
             </DialogContent>

@@ -1,7 +1,7 @@
 "use client"
 
 import { ColumnDef, Row } from "@tanstack/react-table"
-import { MoreHorizontal, MoreHorizontalIcon, PlusCircle } from "lucide-react"
+import { MoreHorizontalIcon, PlusCircle } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
 import {
@@ -81,7 +81,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
         cell: ({ row }) => {
             const variants = row.getValue("variants") as VariantsWithImagesTags[]
             return (
-                <div className="">
+                <div className="flex items-center gap-2">
                     {variants.map((variant) => (
                         <div key={variant.id}>
                             {/* tooltip from shadcn */}
@@ -105,7 +105,7 @@ export const columns: ColumnDef<ProductColumn>[] = [
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <span>
-                                    <ProductVariant editMode={false}>
+                                    <ProductVariant productID={row.original.id} editMode={false}>
                                         <PlusCircle className="w-4 h-4" />
                                     </ProductVariant>
                                 </span>

@@ -2,7 +2,7 @@
 
 import { UploadDropzone } from "@/app/api/uploadthing/upload"
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { variantSchema } from "@/types/variant-schema"
+import { VariantSchema } from "@/types/variant-schema"
 import { useFieldArray, useFormContext } from "react-hook-form"
 import { z } from "zod"
 import {
@@ -22,7 +22,7 @@ import { Reorder } from "framer-motion"
 import { useState } from "react"
 
 export default function VariantImages() {
-    const { getValues, control, setError } = useFormContext<z.infer<typeof variantSchema>>()
+    const { getValues, control, setError } = useFormContext<z.infer<typeof VariantSchema>>()
 
     // useField Array from react hook
     const { fields, remove, append, update, move } = useFieldArray({
