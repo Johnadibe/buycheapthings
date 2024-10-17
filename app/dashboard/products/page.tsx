@@ -9,7 +9,7 @@ export default async function Products() {
         with: {
             productVariants: { with: { variantImages: true, variantTags: true } },
         },
-        orderBy: (product, { desc }) => [desc(product.id)]
+        orderBy: (products, { desc }) => [desc(products.id)]
     })
     if (!products) throw new Error("No products found")
 
@@ -23,28 +23,16 @@ export default async function Products() {
                 variants: [],
             }
         }
-        // const image = product.productVariants[0].variantImages[0].url
-        // return {
-        //     id: product.id,
-        //     title: product.title,
-        //     price: product.price,
-        //     variants: product.productVariants,
-        //     image,
-        // }
 
-        // Check if the first variant has images
-        const variantImages = product.productVariants[0].variantImages;
-        const image = (variantImages && variantImages.length > 0)
-            ? variantImages[0].url
-            : placeholder.src;
-
+        // const image = product.productVariants[0].variantImages.length > 0 ? product.productVariants[0].variantImages[0].url : placeholder.src
+        const image = product.productVariants[0].variantImages[0].url
         return {
             id: product.id,
             title: product.title,
             price: product.price,
-            variants: product.productVariants,
             image,
-        };
+            variants: product.productVariants,
+        }
     })
     if (!dataTable) throw new Error("No data found")
     return (

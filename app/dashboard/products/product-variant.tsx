@@ -136,7 +136,8 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
                                 <FormItem>
                                     <FormLabel>Variant Title</FormLabel>
                                     <FormControl>
-                                        <Input placeholder="Pick a title for your variant" {...field} />
+                                        <Input placeholder="Pick a title for your variant"
+                                            {...field} />
                                     </FormControl>
                                     <FormMessage />
                                 </FormItem>
@@ -173,14 +174,14 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
                         <VariantImages />
                         <div className="flex gap-4 items-center justify-center">
                             {editMode && variant && (
-                                <Button variant={"destructive"} type="button" onClick={(e) => {
+                                <Button disabled={variantAction.status === "executing"} variant={"destructive"} type="button" onClick={(e) => {
                                     e.preventDefault()
                                     variantAction.execute({ id: variant.id })
                                 }}>
                                     Delete Variant
                                 </Button>
                             )}
-                            <Button type="submit">{editMode ? "Update Variant" : "Create Variant"}</Button>
+                            <Button disabled={status === "executing" || !form.formState.isValid || !form.formState.isDirty} type="submit">{editMode ? "Update Variant" : "Create Variant"}</Button>
                         </div>
                     </form>
                 </Form>
