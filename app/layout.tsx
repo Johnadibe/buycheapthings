@@ -3,7 +3,6 @@ import { Roboto } from 'next/font/google';
 import "./globals.css";
 
 import Nav from "@/components/navigation/nav";
-import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import Toaster from "@/components/ui/toaster";
 
