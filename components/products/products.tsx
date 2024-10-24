@@ -1,8 +1,8 @@
 "use client"
 
 import { VariantsWithProduct } from "@/lib/infer-type"
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { Badge } from "../ui/badge"
 import formatPrice from "@/lib/format-price"
 

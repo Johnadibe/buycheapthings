@@ -1,7 +1,5 @@
 import Products from "@/components/products/products";
 import { db } from "@/server";
-import { products, productVariants } from "@/server/schema";
-import { eq } from "drizzle-orm";
 
 export default async function Home() {
   // fetch data
