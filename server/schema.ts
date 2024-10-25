@@ -8,6 +8,7 @@ import {
   pgEnum,
   serial,
   real,
+  index,
 } from "drizzle-orm/pg-core"
 import type { AdapterAccount } from "next-auth/adapters"
 import { createId } from "@paralleldrive/cuid2"
@@ -127,7 +128,8 @@ export const variantTags = pgTable("variantTags", {
 
 // The relationship between the product. i.e A product can have many product variants
 export const productRelations = relations(products, ({ many }) => ({
-  productVariants: many(productVariants, { relationName: "productVariants" })
+  productVariants: many(productVariants, { relationName: "productVariants" }),
+  reviews: many(reviews, { relationName: "reviews" })
 }))
 
 // The relationship between the productVariant. i.e A product variant can have one product variants and A product variant can have many variant images and tags
@@ -157,6 +159,41 @@ export const variantTagsRelations = relations(variantTags, ({ one }) => ({
     fields: [variantTags.variantID],
     references: [productVariants.id],
     relationName: "variantTags"
+  })
+}))
+
+// reviews schema
+export const reviews = pgTable("reviews", {
+  id: serial("id").primaryKey(),
+  rating: real("rating").notNull(),
+  userID: text("userID").notNull().references(() => users.id, { onDelete: "cascade" }),
+  productID: serial("productID").notNull().references(() => products.id, { onDelete: "cascade" }),
+  comment: text("comment").notNull(),
+  created: timestamp("created").defaultNow(),
+}, (table) => {
+  return {
+    productIdx: index("productIdx").on(table.productID),
+    userIdx: index("userIdx").on(table.userID)
+  }
+}) // we will index the productID and userID so that our queries will be faster. That's why we wrote the (table) => function after the comma in line 171
+
+// review relations/relationship. A review can have one product and one user. However a user can have many different reviews, so we will create the user relations table down and do it
+export const reviewRelations = relations(reviews, ({ one }) => ({
+  user: one(users, {
+    fields: [reviews.userID],
+    references: [users.id],
+    relationName: "user_reviews",
+  }),
+  product: one(products, {
+    fields: [reviews.productID],
+    references: [products.id],
+    relationName: "product_reviews"
+  })
+}))
+
+export const userRelations = relations(users, ({ many }) => ({
+  reviews: many(reviews, {
+    relationName: "user_reviews"
   })
 }))
 

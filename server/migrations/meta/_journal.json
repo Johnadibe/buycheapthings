@@ -99,6 +99,13 @@
       "when": 1729173297553,
       "tag": "0013_sharp_steel_serpent",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1729824483711,
+      "tag": "0014_common_princess_powerful",
+      "breakpoints": true
     }
   ]
 }
