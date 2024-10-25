@@ -27,6 +27,9 @@ import { Textarea } from "../ui/textarea"
 import { motion } from "framer-motion"
 import { Star } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { useAction } from "next-safe-action/hooks"
+import { addReview } from "@/server/actions/add-review"
+import { toast } from "sonner"
 
 export default function ReviewsForm() {
     const searchParams = useSearchParams()
@@ -37,11 +40,29 @@ export default function ReviewsForm() {
         defaultValues: {
             rating: 0,
             comment: "",
+            productID,
+        }
+    })
+
+    const { execute, status } = useAction(addReview, {
+        onSuccess({ error, success }) {
+            if (error) {
+                toast.error(error)
+            }
+            if (success) {
+                toast.success("Review Added 👌")
+                form.reset()
+            }
         }
     })
 
     const onSubmit = (values: z.infer<typeof reviewsSchema>) => {
-        console.log(values)
+        // console.log("Running on submit")
+        execute({
+            comment: values.comment,
+            rating: values.rating,
+            productID,
+        })
     }
 
     return (
@@ -71,21 +92,22 @@ export default function ReviewsForm() {
                                 <FormControl>
                                     <Input type="hidden" placeholder="Star Rating" {...field} />
                                 </FormControl>
+                                <FormMessage />
                                 <div className="flex">
                                     {[1, 2, 3, 4, 5].map((value) => {
                                         return (
                                             <motion.div key={value} className="relative cursor-pointer" whileTap={{ scale: 0.8 }} whileHover={{ scale: 1.2 }}>
                                                 <Star key={value} onClick={() => {
                                                     form.setValue("rating", value)
-                                                }} className={cn("text-primary bg-transparent transition-all duration-300 ease-in-out", form.getValues("rating") >= value ? "text-primary" : "text-muted")} />
+                                                }} className={cn("text-primary bg-transparent transition-all duration-300 ease-in-out", form.getValues("rating") >= value ? "fill-primary" : "text-muted")} />
                                             </motion.div>
                                         )
                                     })}
                                 </div>
                             </FormItem>
                         )} />
-                        <Button className="w-full" type="submit">
-                            Add Review
+                        <Button disabled={status === "executing"} className="w-full" type="submit">
+                            {status === "executing" ? "Adding Review..." : "Add Review"}
                         </Button>
                     </form>
                 </Form>
