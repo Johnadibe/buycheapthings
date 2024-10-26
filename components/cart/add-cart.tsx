@@ -43,7 +43,7 @@ export default function AddCart() {
             </div>
             <Button onClick={() => {
                 toast.success(`Added ${title + ' ' + type} to your cart!`)
-                addToCart({ id: productID, variant: { variantID: id, quantity }, name: title + type, price, image })
+                addToCart({ id: productID, variant: { variantID: id, quantity }, name: title + " " + type, price, image })
             }}>Add To cart</Button>
         </>
     )

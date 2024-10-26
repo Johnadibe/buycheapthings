@@ -22,11 +22,13 @@ export default function CartDrawer() {
                     <ShoppingCart />
                 </div>
             </DrawerTrigger>
-            <DrawerContent>
+            <DrawerContent className="min-h-50vh">
                 <DrawerHeader>
-                    <h1>Cart Stuff</h1>
+                    <h1>Cart Progress</h1>
                 </DrawerHeader>
-                <CartItem />
+                <div className="overflow-auto p-4"> {/* overflow-auto makes it to be scrollable if there are too many cart items  */}
+                    <CartItem />
+                </div>
             </DrawerContent>
         </Drawer>
     )
