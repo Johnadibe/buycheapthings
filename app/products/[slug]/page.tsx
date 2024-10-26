@@ -9,6 +9,7 @@ import ProductShowcase from "@/components/products/product-showcase"
 import Reviews from "@/components/reviews/reviews"
 import { getReviewAverage } from "@/lib/review-average"
 import Stars from "@/components/reviews/stars"
+import AddCart from "@/components/cart/add-cart"
 
 export async function generateStaticParams() {
     // fetch data
@@ -73,6 +74,7 @@ export default async function Page({ params }: { params: { slug: string } }) {
                                 <ProductPick key={prodVariant.id} color={prodVariant.color} productID={prodVariant.productID} id={prodVariant.id} price={variant.product.price} title={variant.product.title} image={prodVariant.variantImages[0].url} productType={prodVariant.productType} />
                             ))}
                         </div>
+                        <AddCart />
                     </div>
                 </section>
                 <Reviews productID={variant.productID} />
