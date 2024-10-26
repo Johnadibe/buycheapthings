@@ -187,7 +187,7 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
   product: one(products, {
     fields: [reviews.productID],
     references: [products.id],
-    relationName: "product_reviews"
+    relationName: "reviews"
   })
 }))
 
@@ -196,5 +196,3 @@ export const userRelations = relations(users, ({ many }) => ({
     relationName: "user_reviews"
   })
 }))
-
-export type Products = InferSelectModel<typeof products>
