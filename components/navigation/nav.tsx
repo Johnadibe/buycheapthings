@@ -4,6 +4,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
 import Logo from "./logo";
+import CartDrawer from "../cart/cart-drawer";
 
 export default async function Nav() {
     const session = await auth();
@@ -11,21 +12,22 @@ export default async function Nav() {
     return (
         <header className="py-8">
             <nav>
-                <ul className="flex justify-between items-center">
-                    <li>
+                <ul className="flex justify-between items-center md:gap-8 gap-4">
+                    <li className="flex flex-1">
                         <Link href="/" aria-label="buycheapthings"><h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight">
                             Buy<span className="text-primary">Cheap</span>Things
                         </h1></Link>
 
                     </li>
+                    <li className="relative flex items-center hover:bg-muted"><CartDrawer /></li>
                     {!session ? (
-                        <li>
+                        <li className="flex items-center justify-center">
                             <Button asChild>
                                 <Link className="flex gap-2" href="/auth/login"><LogIn size={16} /><span>Login</span></Link>
                             </Button>
                         </li>
                     ) :
-                        <li><UserButton expires={session?.expires} user={session?.user} /></li>
+                        <li className="flex items-center justify-center"><UserButton expires={session?.expires} user={session?.user} /></li>
                     }
                 </ul>
             </nav>
