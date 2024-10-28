@@ -24,6 +24,7 @@ export default function CartItem() {
             return { letter, id: createId() }
         })
     }, [totalPrice])
+
     return (
         <motion.div className="flex flex-col items-center">
             {cart.length === 0 && (

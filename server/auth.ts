@@ -8,20 +8,31 @@ import { LoginSchema } from "@/types/login-schema"
 import { eq } from "drizzle-orm"
 import { accounts, users } from "./schema"
 import bcrypt from "bcryptjs"
- 
+import Stripe from "stripe"
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db),
   secret: process.env.AUTH_SECRET,
   session: { strategy: "jwt" },
+  events: {
+    createUser: async ({ user }) => {
+      const stripe = new Stripe(process.env.STRIPE_SECRET!, { apiVersion: "2024-09-30.acacia" })
+      const customer = await stripe.customers.create({
+        email: user.email!,
+        name: user.name!,
+      })
+      await db.update(users).set({ customerID: customer.id }).where(eq(users.id, user.id!))
+    }
+  },
   callbacks: {
-    async session({session, token}) {
-      if(session && token.sub){
+    async session({ session, token }) {
+      if (session && token.sub) {
         session.user.id = token.sub
       }
-      if(session && token.role) {
+      if (session && token.role) {
         session.user.role = token.role as string
       }
-      if(session.user) {
+      if (session.user) {
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean
         session.user.name = token.name
         session.user.email = token.email as string
@@ -31,13 +42,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return session
     },
-    async jwt({token}) {
-      if(!token.sub) return token // token.sub is the id of the user
+    async jwt({ token }) {
+      if (!token.sub) return token // token.sub is the id of the user
       // user
       const existingUser = await db.query.users.findFirst({
         where: eq(users.id, token.sub)
       })
-      if(!existingUser) return token
+      if (!existingUser) return token
 
       // account
       const existingAccount = await db.query.accounts.findFirst({
@@ -56,30 +67,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   providers: [
     Google({
-        clientId: process.env.GOOGLE_CLIENT_ID,
-        clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-        allowDangerousEmailAccountLinking: true, // This will sign in for google and allow if you want to sign in for github too
+      clientId: process.env.GOOGLE_CLIENT_ID,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+      allowDangerousEmailAccountLinking: true, // This will sign in for google and allow if you want to sign in for github too
     }),
     Github({
-        clientId: process.env.GITHUB_ID,
-        clientSecret: process.env.GITHUB_SECRET,
-        allowDangerousEmailAccountLinking: true, // This will sign in for github and allow if you want to sign in for google too
+      clientId: process.env.GITHUB_ID,
+      clientSecret: process.env.GITHUB_SECRET,
+      allowDangerousEmailAccountLinking: true, // This will sign in for github and allow if you want to sign in for google too
     }),
     // Add credential provider for the login of email and password
     Credentials({
-      authorize : async (credentials) => {
+      authorize: async (credentials) => {
         const validatedFields = LoginSchema.safeParse(credentials)
 
-        if(validatedFields.success) {
-          const {email, password} = validatedFields.data
+        if (validatedFields.success) {
+          const { email, password } = validatedFields.data
           const user = await db.query.users.findFirst({
             where: eq(users.email, email)
           })
 
-          if(!user || !user.password) return null
+          if (!user || !user.password) return null
 
           const passwordMatch = await bcrypt.compare(password, user.password)
-          if(passwordMatch) return user
+          if (passwordMatch) return user
         }
         return null
       }

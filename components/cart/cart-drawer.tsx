@@ -6,6 +6,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTrigger } from "../ui/drawer
 import { motion, AnimatePresence } from "framer-motion";
 import CartItem from "./cart-items";
 import CartMessage from "./cart-message";
+import Payment from "./payment";
 
 export default function CartDrawer() {
     const { cart, checkoutProgress } = useCartStore();
@@ -29,6 +30,7 @@ export default function CartDrawer() {
                 </DrawerHeader>
                 <div className="overflow-auto p-4"> {/* overflow-auto makes it to be scrollable if there are too many cart items  */}
                     {checkoutProgress === "cart-page" && <CartItem />}
+                    {checkoutProgress === "payment-page" && <Payment />}
                 </div>
             </DrawerContent>
         </Drawer>
