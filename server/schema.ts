@@ -194,5 +194,34 @@ export const reviewRelations = relations(reviews, ({ one }) => ({
 export const userRelations = relations(users, ({ many }) => ({
   reviews: many(reviews, {
     relationName: "user_reviews"
+  }),
+  orders: many(orders, {
+    relationName: "user_orders"
   })
 }))
+
+export const orders = pgTable("orders", {
+  id: serial("id").primaryKey(),
+  userID: text("userID").notNull().references(() => users.id, { onDelete: "cascade" }),
+  total: real("total").notNull(),
+  status: text("status").notNull(),
+  timestamp: timestamp("created").defaultNow(),
+  receiptURL: text("receiptURL"),
+})
+
+// orders relation
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  users: one(users, {
+    fields: [orders.userID],
+    references: [users.id],
+    relationName: "user_orders"
+  }),
+  orderProduct: many(orderProduct, { relationName: "orderProduct" })
+}))
+
+export const orderProduct = pgTable("orderProduct", {
+  id: serial("id").primaryKey(),
+  quantity: integer("quantity").notNull(),
+  productID: serial("productID").notNull().references(() => products.id, { onDelete: "cascade" }),
+  productVariantID: serial("productVariantID").notNull().references(() => productVariants.id, { onDelete: "cascade" }),
+})
