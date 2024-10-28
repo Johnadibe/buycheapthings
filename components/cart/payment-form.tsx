@@ -5,13 +5,30 @@ import { AddressElement, PaymentElement, useElements, useStripe } from "@stripe/
 import { Button } from "../ui/button"
 import { useState } from "react"
 import { createPaymentIntent } from "@/server/actions/create-payment-intent"
+import { useAction } from "next-safe-action/hooks"
+import { createOrder } from "@/server/actions/create-order"
+import { toast } from "sonner"
+import { revalidatePath } from "next/cache"
 
 export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
     const stripe = useStripe() // This hook is available because we wrapped this payment form component in the Element component from @stripe/react-stripe-js in payment.tsx file
     const elements = useElements() // The same for this one
-    const { cart } = useCartStore()
+    const { cart, setCheckoutProgress } = useCartStore()
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
+
+    const { execute, status } = useAction(createOrder, {
+        onSuccess({ error, success }) {
+            if (error) {
+                toast.error(error)
+            }
+            if (success) {
+                setIsLoading(false)
+                toast.success(success)
+                setCheckoutProgress("confirmation-page")
+            }
+        }
+    })
 
     const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault()
@@ -27,7 +44,7 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
             return
         }
         const { data } = await createPaymentIntent({
-            amount: totalPrice,
+            amount: totalPrice * 100,
             currency: "usd",
             cart: cart.map((item) => ({
                 quantity: item.variant.quantity,
@@ -58,7 +75,11 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
                 return
             } else {
                 setIsLoading(false)
-                console.log("save the order")
+                execute({
+                    status: "pending",
+                    total: totalPrice,
+                    products: cart.map((item) => ({ productID: item.id, variantID: item.variant.variantID, quantity: item.variant.quantity }))
+                })
             }
         }
     }
@@ -66,8 +87,8 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
         <form onSubmit={handleSubmit}>
             <PaymentElement />
             <AddressElement options={{ mode: "shipping" }} />
-            <Button disabled={!stripe || !elements}>
-                <span>Pay Now</span>
+            <Button className="my-4 w-full" disabled={!stripe || !elements || isLoading}>
+                {isLoading ? "Processing..." : "Pay Now"}
             </Button>
         </form>
     )

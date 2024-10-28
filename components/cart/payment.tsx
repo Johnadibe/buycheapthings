@@ -20,7 +20,7 @@ export default function Payment() {
             <Elements stripe={stripe} options={{
                 mode: "payment",
                 currency: "usd",
-                amount: totalPrice,
+                amount: totalPrice * 100,
             }}>
                 <PaymentForm totalPrice={totalPrice} />
             </Elements>
