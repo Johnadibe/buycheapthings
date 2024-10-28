@@ -10,9 +10,10 @@ import { AnimatePresence, motion } from "framer-motion"
 import Lottie from "lottie-react"
 import emptyCart from "@/public/empty-box.json"
 import { createId } from "@paralleldrive/cuid2"
+import { Button } from "../ui/button"
 
 export default function CartItem() {
-    const { cart, addToCart, removeFromCart } = useCartStore()
+    const { cart, addToCart, removeFromCart, setCheckoutProgress } = useCartStore()
     const totalPrice = useMemo(() => {
         return cart.reduce((acc, item) => acc + item.price! * item.variant.quantity, 0)
     }, [cart])
@@ -24,7 +25,7 @@ export default function CartItem() {
         })
     }, [totalPrice])
     return (
-        <motion.div>
+        <motion.div className="flex flex-col items-center">
             {cart.length === 0 && (
                 <div className="flex-col w-full flex items-center justify-center">
                     <motion.div animate={{ opacity: 1 }} initial={{ opacity: 0 }} transition={{ delay: 0.3, duration: 0.5 }}>
@@ -34,8 +35,8 @@ export default function CartItem() {
                 </div>
             )}
             {cart.length > 0 && (
-                <div>
-                    <Table>
+                <div className="h-80 w-full overflow-y-auto">
+                    <Table className="max-w-2xl mx-auto">
                         <TableHeader>
                             <TableRow>
                                 <TableCell>Product</TableCell>
@@ -92,6 +93,8 @@ export default function CartItem() {
                     ))}
                 </AnimatePresence>
             </motion.div>
+            {/* Button for go to the next */}
+            <Button disabled={cart.length === 0} className="max-w-md w-full" onClick={() => setCheckoutProgress("payment-page")}>Checkout</Button>
         </motion.div>
     )
 }
