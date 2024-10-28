@@ -13,7 +13,7 @@ import { revalidatePath } from "next/cache"
 export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
     const stripe = useStripe() // This hook is available because we wrapped this payment form component in the Element component from @stripe/react-stripe-js in payment.tsx file
     const elements = useElements() // The same for this one
-    const { cart, setCheckoutProgress } = useCartStore()
+    const { cart, setCheckoutProgress, clearCart } = useCartStore()
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
 
@@ -26,6 +26,7 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
                 setIsLoading(false)
                 toast.success(success)
                 setCheckoutProgress("confirmation-page")
+                clearCart()
             }
         }
     })
