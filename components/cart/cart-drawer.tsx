@@ -10,9 +10,9 @@ import Payment from "./payment";
 import OrderConfirm from "./order-confirm";
 
 export default function CartDrawer() {
-    const { cart, checkoutProgress, setCheckoutProgress } = useCartStore();
+    const { cart, checkoutProgress, setCheckoutProgress, cartOpen, setCartOpen } = useCartStore();
     return (
-        <Drawer>
+        <Drawer open={cartOpen} onOpenChange={setCartOpen}>
             <DrawerTrigger>
                 <div className="relative px-2">
                     <AnimatePresence>
@@ -35,6 +35,6 @@ export default function CartDrawer() {
                     {checkoutProgress === "confirmation-page" && <OrderConfirm />}
                 </div>
             </DrawerContent>
-        </Drawer>
+        </Drawer >
     )
 }

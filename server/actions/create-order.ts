@@ -21,7 +21,7 @@ export const createOrder = action(orderSchema, async ({ products, total, status 
     }).returning()
 
     // save all the order product, so each individual product should also be saved.
-    const orderProduct = products.map(async ({ productID, quantity, variantID }) => {
+    const orderProducts = products.map(async ({ productID, quantity, variantID }) => {
         const newOrderProduct = await db.insert(orderProduct).values({
             quantity,
             orderID: order[0].id,
