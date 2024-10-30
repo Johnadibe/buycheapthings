@@ -8,7 +8,6 @@ import { createPaymentIntent } from "@/server/actions/create-payment-intent"
 import { useAction } from "next-safe-action/hooks"
 import { createOrder } from "@/server/actions/create-order"
 import { toast } from "sonner"
-import { revalidatePath } from "next/cache"
 
 export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
     const stripe = useStripe() // This hook is available because we wrapped this payment form component in the Element component from @stripe/react-stripe-js in payment.tsx file

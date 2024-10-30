@@ -15,7 +15,7 @@ import { Button } from "../ui/button"
 export default function CartItem() {
     const { cart, addToCart, removeFromCart, setCheckoutProgress } = useCartStore()
     const totalPrice = useMemo(() => {
-        return cart.reduce((acc, item) => acc + item.price! * item.variant.quantity, 0)
+        return cart.reduce((acc, item) => acc + item.price * item.variant.quantity, 0)
     }, [cart])
 
     // 
@@ -36,20 +36,19 @@ export default function CartItem() {
                 </div>
             )}
             {cart.length > 0 && (
-                <div className="h-80 w-full overflow-y-auto">
+                <div className="max-h-80 w-full overflow-y-auto">
                     <Table className="max-w-2xl mx-auto">
                         <TableHeader>
                             <TableRow>
-                                <TableCell>Product</TableCell>
-                                <TableCell>Price</TableCell>
-                                <TableCell>Image</TableCell>
-                                <TableCell>Quantity</TableCell>
-                                <TableCell>Total</TableCell>
+                                <TableHead>Product</TableHead>
+                                <TableHead>Price</TableHead>
+                                <TableHead>Image</TableHead>
+                                <TableHead>Quantity</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             {cart.map((item) => (
-                                <TableRow key={item.id}>
+                                <TableRow key={(item.id + item.variant.variantID).toString()}>
                                     <TableCell>{item.name}</TableCell>
                                     <TableCell>{formatPrice(item.price)}</TableCell>
                                     <TableCell>
@@ -74,7 +73,6 @@ export default function CartItem() {
                                             }} />
                                         </div>
                                     </TableCell>
-                                    <TableCell>{totalPrice}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
