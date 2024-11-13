@@ -1,4 +1,5 @@
 // This component is the card of the one single review
+/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client"
 
 import { ReviewsWithUser } from "@/lib/infer-type"

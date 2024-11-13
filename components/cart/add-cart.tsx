@@ -8,7 +8,7 @@ import { toast } from "sonner"
 import { redirect, useSearchParams } from "next/navigation"
 
 export default function AddCart() {
-    const { cart, addToCart } = useCartStore()
+    const { addToCart } = useCartStore()
     // local state for increamenting and decreamenting quanity
     const [quantity, setquantity] = useState(1)
     const params = useSearchParams()

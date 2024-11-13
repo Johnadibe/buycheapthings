@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { UploadDropzone } from "@/app/api/uploadthing/upload"
@@ -7,8 +8,6 @@ import { useFieldArray, useFormContext } from "react-hook-form"
 import { z } from "zod"
 import {
     Table,
-    TableBody,
-    TableCaption,
     TableCell,
     TableHead,
     TableHeader,

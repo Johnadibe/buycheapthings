@@ -3,7 +3,6 @@ import { UserButton } from "./user-button";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { LogIn } from "lucide-react";
-import Logo from "./logo";
 import CartDrawer from "../cart/cart-drawer";
 
 export default async function Nav() {

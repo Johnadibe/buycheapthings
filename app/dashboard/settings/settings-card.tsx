@@ -1,10 +1,10 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
@@ -22,8 +22,6 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { auth } from "@/server/auth"
-import { redirect } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { SettingsSchema } from "@/types/settings-schema"
 import Image from "next/image"

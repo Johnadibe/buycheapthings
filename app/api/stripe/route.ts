@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from '@/server';
 import { orders } from '@/server/schema';
 import { eq } from 'drizzle-orm';

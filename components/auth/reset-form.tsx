@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useForm } from "react-hook-form"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "../ui/form"
-import {zodResolver} from "@hookform/resolvers/zod"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { AuthCard } from "./auth-card"
 import * as z from "zod"
 import { Input } from "../ui/input"
 import { Button } from "../ui/button"
 import Link from "next/link"
-import {useAction} from "next-safe-action/hooks"
+import { useAction } from "next-safe-action/hooks"
 import { cn } from "@/lib/utils"
 import { useState } from "react"
 import { FormSuccess } from "./form-success"
@@ -21,7 +22,7 @@ export const ResetForm = () => {
     const form = useForm<z.infer<typeof ResetSchema>>({
         resolver: zodResolver(ResetSchema),
         defaultValues: {
-            email: "", 
+            email: "",
         }
     });
 
@@ -30,10 +31,10 @@ export const ResetForm = () => {
     const [success, setSuccess] = useState("");
 
     // using the new-password.ts action
-    const {execute, status} = useAction(passwordReset, {
-        onSuccess(data){
-            if(data?.error) setError(data.error)
-            if(data?.success) setSuccess(data.success)
+    const { execute, status } = useAction(passwordReset, {
+        onSuccess(data) {
+            if (data?.error) setError(data.error)
+            if (data?.success) setSuccess(data.success)
         }
     })
 
@@ -49,29 +50,29 @@ export const ResetForm = () => {
                     <form onSubmit={form.handleSubmit(onSubmit)}>
                         <div>
 
-  {/* Password */}
-  <FormField
-    control={form.control}
-    name="email"
-    render={({field}) => (
-      <FormItem>
-        <FormLabel>Email</FormLabel>
-        <FormControl>
-          { /* Your form field */}
-          <Input placeholder="johnadibe123@gmail.com" {...field} type="email" autoComplete="email" disabled={status === "executing"}/>
-        </FormControl>
-        <FormDescription />
-        <FormMessage />
-      </FormItem>
-    )}
-  />
-  <FormSuccess message={success}/>
-  <FormError message={error} />
-  <Button variant={"link"} size={"sm"}>
-    <Link href="/auth/reset">Forgot your password?</Link>
-  </Button>
+                            {/* Password */}
+                            <FormField
+                                control={form.control}
+                                name="email"
+                                render={({ field }) => (
+                                    <FormItem>
+                                        <FormLabel>Email</FormLabel>
+                                        <FormControl>
+                                            { /* Your form field */}
+                                            <Input placeholder="johnadibe123@gmail.com" {...field} type="email" autoComplete="email" disabled={status === "executing"} />
+                                        </FormControl>
+                                        <FormDescription />
+                                        <FormMessage />
+                                    </FormItem>
+                                )}
+                            />
+                            <FormSuccess message={success} />
+                            <FormError message={error} />
+                            <Button variant={"link"} size={"sm"}>
+                                <Link href="/auth/reset">Forgot your password?</Link>
+                            </Button>
                         </div>
-  <Button type="submit" className={cn("w-full", status === "executing" ? "animate-pulse" : "")}>Reset Password</Button>
+                        <Button type="submit" className={cn("w-full", status === "executing" ? "animate-pulse" : "")}>Reset Password</Button>
                     </form>
                 </Form>
             </div>

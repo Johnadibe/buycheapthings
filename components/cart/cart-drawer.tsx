@@ -10,7 +10,7 @@ import Payment from "./payment";
 import OrderConfirm from "./order-confirm";
 
 export default function CartDrawer() {
-    const { cart, checkoutProgress, setCheckoutProgress, cartOpen, setCartOpen } = useCartStore();
+    const { cart, checkoutProgress, cartOpen, setCartOpen } = useCartStore();
     return (
         <Drawer open={cartOpen} onOpenChange={setCartOpen}>
             <DrawerTrigger>
