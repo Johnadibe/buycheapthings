@@ -16,7 +16,7 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
     const [isLoading, setIsLoading] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
 
-    const { execute, status } = useAction(createOrder, {
+    const { execute } = useAction(createOrder, {
         onSuccess({ error, success }) {
             if (error) {
                 toast.error(error)
@@ -77,6 +77,7 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
                 setIsLoading(false)
                 execute({
                     status: "pending",
+                    paymentIntentID: data.success.paymentIntentID,
                     total: totalPrice,
                     products: cart.map((item) => ({ productID: item.id, variantID: item.variant.variantID, quantity: item.variant.quantity }))
                 })

@@ -8,7 +8,7 @@ import { orderProduct, orders } from "../schema"
 
 const action = createSafeActionClient()
 
-export const createOrder = action(orderSchema, async ({ products, total, status }) => {
+export const createOrder = action(orderSchema, async ({ products, total, status, paymentIntentID }) => {
     // get the user
     const user = await auth()
     if (!user) return { error: "User not found" }
@@ -16,6 +16,7 @@ export const createOrder = action(orderSchema, async ({ products, total, status 
     // order
     const order = await db.insert(orders).values({
         total,
+        paymentIntentID,
         status,
         userID: user.user.id,
     }).returning()

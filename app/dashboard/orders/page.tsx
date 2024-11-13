@@ -74,7 +74,7 @@ export default async function Orders() {
                             <TableRow key={order.id}>
                                 <TableCell>{order.id}</TableCell>
                                 <TableCell>₦{order.total}</TableCell>
-                                <TableCell><Badge className={order.status === "succeeded" ? "bg-green-700" : "bg-secondary-foreground"}>{order.status}</Badge></TableCell>
+                                <TableCell><Badge className={order.status === "succeeded" ? "bg-green-700 hover:bg-green-800" : "bg-yellow-700 hover:bg-yellow-800"}>{order.status}</Badge></TableCell>
                                 <TableCell className="text-sm font-medium">{formatDistance(subMinutes(order.timestamp!, 0), new Date(), {
                                     addSuffix: true,
                                 })}</TableCell>
@@ -92,6 +92,7 @@ export default async function Orders() {
                                                         <Button className="w-full" variant={"ghost"}>View Details</Button>
                                                     </DialogTrigger>
                                                 </DropdownMenuItem>
+                                                <DropdownMenuItem></DropdownMenuItem>
                                             </DropdownMenuContent>
                                         </DropdownMenu>
                                         <DialogContent>
