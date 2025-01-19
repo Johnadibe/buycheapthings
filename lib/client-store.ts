@@ -32,7 +32,7 @@ export const useCartStore = create<CartState>()(
             cartOpen: false,
             setCartOpen: (val) => set({ cartOpen: val }),
             checkoutProgress: "cart-page",
-            setCheckoutProgress: (val) => set((_state) => ({ checkoutProgress: val })),
+            setCheckoutProgress: (val) => set(() => ({ checkoutProgress: val })),
             addToCart: (item) => set((state) => {
                 const existingItem = state.cart.find((cartItem) => cartItem.variant.variantID === item.variant.variantID)
                 if (existingItem) {

@@ -28,7 +28,7 @@ import VariantImages from "./variant-images"
 import { useAction } from "next-safe-action/hooks"
 import { createVariant } from "@/server/actions/create-variant"
 import { toast } from "sonner"
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useState } from "react"
 import { deleteVariant } from "@/server/actions/delete-variant"
 
 export const ProductVariant = ({ editMode, productID, variant, children }: { editMode: boolean, productID?: number, variant?: VariantsWithImagesTags, children: React.ReactNode }) => {
@@ -48,7 +48,7 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
     const [open, setOpen] = useState(false)
 
     // Edit
-    const setEdit = () => {
+    const setEdit = useCallback(() => {
         if (!editMode) {
             form.reset()
             return
@@ -69,7 +69,7 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
                 }))
             )
         }
-    }
+    }, [editMode, form, variant])
 
     useEffect(() => {
         setEdit()
