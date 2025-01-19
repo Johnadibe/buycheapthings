@@ -3,7 +3,6 @@
 import { eq } from "drizzle-orm"
 import { db } from ".."
 import { emailTokens, passwordResetTokens, twoFactorTokens, users } from "../schema"
-import { error } from "console"
 import crypto from "crypto"
 
 

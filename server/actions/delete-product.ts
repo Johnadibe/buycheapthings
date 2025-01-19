@@ -1,6 +1,5 @@
 "use server"
 
-import { productSchema } from "@/types/product-schema"
 import { createSafeActionClient } from "next-safe-action"
 import { z } from "zod"
 import { db } from ".."
@@ -10,13 +9,13 @@ import { revalidatePath } from "next/cache"
 
 const action = createSafeActionClient()
 
-export const deleteProduct = action(z.object({id: z.number()}), async ({ id }) => {
-    try{
+export const deleteProduct = action(z.object({ id: z.number() }), async ({ id }) => {
+    try {
         const data = await db.delete(products).where(eq(products.id, id)).returning()
 
         revalidatePath("/dashboard/products")
-        return { success: `Product ${data[0]} has been deleted`}
-    } catch(err){
+        return { success: `Product ${data[0]} has been deleted` }
+    } catch (err) {
         return { error: "Failed to delete product" }
     }
 })

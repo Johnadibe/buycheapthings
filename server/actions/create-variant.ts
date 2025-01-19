@@ -7,12 +7,15 @@ import { eq } from "drizzle-orm"
 import { products, productVariants, variantImages, variantTags } from "../schema"
 import { revalidatePath } from "next/cache"
 import algoliasearch from "algoliasearch"
+import { z } from "zod"
 
 const action = createSafeActionClient()
 
 const client = algoliasearch(process.env.NEXT_PUBLIC_ALGOLIA_ID!, process.env.ALGOLIA_ADMIN!)
 
-const algoliaIndex = client.initIndex("products")
+const algoliaIndex = client.initIndex("products");
+
+type VariantImage = z.infer<typeof VariantSchema>["variantImages"][number];
 
 export const createVariant = action(VariantSchema, async ({ color, editMode, id, productID, productType, tags, variantImages: newImgs }) => {
     try {
@@ -22,7 +25,7 @@ export const createVariant = action(VariantSchema, async ({ color, editMode, id,
             // clear our variant tags
             await db.delete(variantTags).where(eq(variantTags.variantID, editVariant[0].id))
             // insert new variant tags
-            await db.insert(variantTags).values(tags.map((tag) => ({
+            await db.insert(variantTags).values(tags.map((tag: string) => ({
                 tag, variantID: editVariant[0].id
             })))
             // we will do the images as well
@@ -30,7 +33,7 @@ export const createVariant = action(VariantSchema, async ({ color, editMode, id,
             // 
             await db.insert(variantImages).values(
                 // newImgs.map((img: { url: string; size: number; key?: string; id?: number; name: string }, index: number) => ({
-                newImgs.map((img, index) => ({
+                newImgs.map((img: VariantImage, index: number) => ({
                     name: img.name,
                     size: img.size,
                     url: img.url,
@@ -59,14 +62,14 @@ export const createVariant = action(VariantSchema, async ({ color, editMode, id,
                 where: eq(products.id, productID)
             })
             await db.insert(variantTags).values(
-                tags.map((tag) => ({
+                tags.map((tag: string) => ({
                     tag, variantID: newVariant[0].id
                 }))
             )
 
             await db.insert(variantImages).values(
                 // newImgs.map((img: { url: string; size: number; key?: string; id?: number; name: string }, index: number) => ({
-                newImgs.map((img, index) => ({
+                newImgs.map((img: VariantImage, index: number) => ({
                     name: img.name,
                     size: img.size,
                     url: img.url,

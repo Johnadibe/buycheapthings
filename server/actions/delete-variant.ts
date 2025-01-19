@@ -1,6 +1,5 @@
 "use server"
 
-import { VariantSchema } from "@/types/variant-schema"
 import { createSafeActionClient } from "next-safe-action"
 import { z } from "zod"
 import { db } from ".."
