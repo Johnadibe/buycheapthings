@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { UploadDropzone } from "@/app/api/uploadthing/upload"
@@ -36,7 +35,7 @@ export default function VariantImages() {
             <FormField
                 control={control}
                 name="variantImages"
-                render={({ field }) => (
+                render={() => (
                     <FormItem>
                         <FormLabel>Tags</FormLabel>
                         <FormControl>

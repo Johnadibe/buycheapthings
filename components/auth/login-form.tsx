@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unescaped-entities */
 "use client"
 
 import { useForm } from "react-hook-form"
@@ -63,7 +62,7 @@ export const LoginForm = () => {
                   name="code"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>We've sent you a two factor code to your email.</FormLabel>
+                      <FormLabel>We&#39;ve sent you a two factor code to your email.</FormLabel>
                       <FormControl>
                         { /* Your form field */}
                         <InputOTP disabled={status === "executing"} {...field} maxLength={6}>

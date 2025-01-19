@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { Session } from "next-auth"
@@ -24,18 +23,6 @@ export const UserButton = ({ user }: Session) => {
   const { setTheme, theme } = useTheme();
   const [checked, setChecked] = useState(false);
   const router = useRouter()
-
-  // function to toggle the theme
-  function setSwitchState() {
-    switch (theme) {
-      case "dark":
-        return setChecked(true);
-      case "light":
-        return setChecked(false);
-      case "system":
-        return setChecked(false);
-    }
-  }
 
   if (user)
     return (

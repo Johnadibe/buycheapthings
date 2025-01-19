@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { useCartStore } from "@/lib/client-store"
@@ -89,6 +88,9 @@ export default function PaymentForm({ totalPrice }: { totalPrice: number }) {
         <form onSubmit={handleSubmit}>
             <PaymentElement />
             <AddressElement options={{ mode: "shipping" }} />
+            {errorMessage && (
+                <div className="text-red-500 text-sm mt-2">{errorMessage}</div>
+            )}
             <Button className="my-4 w-full" disabled={!stripe || !elements || isLoading}>
                 {isLoading ? "Processing..." : "Pay Now"}
             </Button>

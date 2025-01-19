@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import {
@@ -60,7 +59,7 @@ export default function SettingsCard(session: SettingsForm) {
       if (data?.success) setSuccess(data.success)
       if (data?.error) setError(data.error)
     },
-    onError: (error) => {
+    onError: () => {
       setError("Something went wrong")
     }
   })

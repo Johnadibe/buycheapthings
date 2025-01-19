@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
@@ -33,7 +32,7 @@ export const useCartStore = create<CartState>()(
             cartOpen: false,
             setCartOpen: (val) => set({ cartOpen: val }),
             checkoutProgress: "cart-page",
-            setCheckoutProgress: (val) => set((state) => ({ checkoutProgress: val })),
+            setCheckoutProgress: (val) => set((_state) => ({ checkoutProgress: val })),
             addToCart: (item) => set((state) => {
                 const existingItem = state.cart.find((cartItem) => cartItem.variant.variantID === item.variant.variantID)
                 if (existingItem) {

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 "use client"
 
 import { productSchema, zProductSchema } from "@/types/product-schema"
@@ -28,7 +27,7 @@ import { z } from "zod"
 import { useRouter, useSearchParams } from "next/navigation"
 import { toast } from "sonner"
 import { getProduct } from "@/server/actions/get-product"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 
 export default function ProductForm() {
 
@@ -50,7 +49,7 @@ export default function ProductForm() {
   const editMode = searchParams.get("id")
 
   // A function to check if the product exist or not
-  const checkProduct = async (id: number) => {
+  const checkProduct = useCallback(async (id: number) => {
     if (editMode) {
       const data = await getProduct(id)
       if (data.error) {
@@ -59,21 +58,20 @@ export default function ProductForm() {
         return
       }
       if (data.success) {
-        const id = parseInt(editMode)
         form.setValue("title", data.success.title)
         form.setValue("description", data.success.description)
         form.setValue("price", data.success.price)
         form.setValue("id", data.success.id)
       }
     }
-  }
+  }, [editMode, form, router])
 
   // 
   useEffect(() => {
     if (editMode) {
       checkProduct(parseInt(editMode))
     }
-  }, [])
+  }, [checkProduct, editMode])
 
   // 
   const { execute, status } = useAction(createProduct, {
@@ -86,7 +84,7 @@ export default function ProductForm() {
         toast.success(data.success)
       }
     },
-    onExecute: (data) => {
+    onExecute: () => {
       if (editMode) toast.loading("Editing Product")
       if (!editMode) toast.loading("Creating Product")
     },
@@ -142,7 +140,6 @@ export default function ProductForm() {
                   <FormLabel>Product Price</FormLabel>
                   <FormControl>
                     <div className="flex items-center gap-2">
-                      {/* <DollarSign size={32} className="py-2 bg-muted rounded-md" /> */}
                       <span className="py-2 rounded-md text-2xl">₦</span>
                       <Input {...field} type="number" placeholder="Your price in NGN" step="0.1" min={0} />
                     </div>

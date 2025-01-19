@@ -37,7 +37,7 @@ type ProductColumn = {
 }
 
 const ActionCell = ({ row }: { row: Row<ProductColumn> }) => {
-    const { execute, status } = useAction(deleteProduct, {
+    const { execute } = useAction(deleteProduct, {
         onSuccess: (data) => {
             if (data.success) {
                 toast.success(data.success)

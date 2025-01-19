@@ -73,7 +73,7 @@ export const ProductVariant = ({ editMode, productID, variant, children }: { edi
 
     useEffect(() => {
         setEdit()
-    }, [variant])
+    }, [variant, setEdit])
 
     //
     const { execute, status } = useAction(createVariant, {

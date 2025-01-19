@@ -14,7 +14,7 @@ type InputTypeProps = InputProps & {
     onChange: Dispatch<SetStateAction<string[]>>
 }
 
-export const InputTags = forwardRef<HTMLInputElement, InputTypeProps>(({ onChange, value, ...props }, ref) => {
+export const InputTags = forwardRef<HTMLInputElement, InputTypeProps>(({ onChange, value, ...props }) => {
     const [pendingDataPoint, setPendingDataPoint] = useState("")
     const [focused, setFocused] = useState(false)
 
@@ -58,7 +58,7 @@ export const InputTags = forwardRef<HTMLInputElement, InputTypeProps>(({ onChang
                             newValue.pop()
                             onChange(newValue)
                         }
-                    }} value={pendingDataPoint} onFocus={(e) => setFocused(true)} onBlurCapture={(e) => setFocused(false)} onChange={(e) => setPendingDataPoint(e.target.value)} {...props} />
+                    }} value={pendingDataPoint} onFocus={() => setFocused(true)} onBlurCapture={() => setFocused(false)} onChange={(e) => setPendingDataPoint(e.target.value)} {...props} />
                 </div>
             </motion.div>
         </div >

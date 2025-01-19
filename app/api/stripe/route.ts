@@ -24,10 +24,13 @@ export async function POST(req: NextRequest) {
 
     try {
         event = stripe.webhooks.constructEvent(reqBuffer, sig, signingSecret);
-    } catch (err: any) {
-        return new NextResponse(`Webhook Error: ${err.message}`, {
-            status: 400,
-        });
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            return new NextResponse(`Webhook Error: ${err.message}`, {
+                status: 400,
+            });
+        }
+        return new NextResponse("Webhook Error", { status: 400 });
     }
 
     // Handle the event just an example!
@@ -36,7 +39,7 @@ export async function POST(req: NextRequest) {
             const retrieveOrder = await stripe.paymentIntents.retrieve(event.data.object.id, { expand: ["latest_charge"] })
             const charge = retrieveOrder.latest_charge as Stripe.Charge
 
-            const customers = await db.update(orders).set({
+            await db.update(orders).set({
                 status: charge.status,
                 receiptURL: charge.receipt_url,
             }).where(eq(orders.paymentIntentID, event.data.object.id)).returning()

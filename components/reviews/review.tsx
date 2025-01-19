@@ -1,5 +1,4 @@
 // This component is the card of the one single review
-/* eslint-disable @typescript-eslint/no-non-null-asserted-optional-chain */
 "use client"
 
 import { ReviewsWithUser } from "@/lib/infer-type"
@@ -16,14 +15,26 @@ export default function Review({ reviews }: { reviews: ReviewsWithUser[] }) {
             {reviews.map((review) => (
                 <Card key={review.id} className="p-4">
                     <div className="flex gap-2 items-center">
-                        <Image className="rounded-full" src={review.user?.image!} width={32} height={32} alt={review.user.name!} />
+                        {review.user?.image && (
+                            <Image
+                                className="rounded-full"
+                                src={review.user.image}
+                                width={32}
+                                height={32}
+                                alt={review.user?.name || "Anonymous"}
+                            />
+                        )}
                         <div>
-                            <p className="text-sm font-bold">{review.user.name}</p>
+                            <p className="text-sm font-bold">{review.user?.name || "Anonymous"}</p>
                             <div className="flex items-center gap-2">
                                 {/* star componanet */}
                                 <Stars rating={review.rating} />
                                 {/* display when the review was added. we will use date-fns */}
-                                <p className="text-xs text-bold text-muted-foreground">{formatDistance(subDays(review.created!, 0), new Date())}</p>
+                                <p className="text-xs text-bold text-muted-foreground">
+                                    {review.created
+                                        ? formatDistance(subDays(review.created, 0), new Date())
+                                        : "Unknown date"}
+                                    {formatDistance(subDays(review.created!, 0), new Date())}</p>
                             </div>
                         </div>
                     </div>
