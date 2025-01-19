@@ -94,11 +94,11 @@ Below are a few screenshots showcasing the user interface and features:
 
 3. **Cart Drawer Screenshot**
 
-- ![Image](https://github.com/user-attachments/assets/046949ba-b3b4-4a0c-a770-ce9a2fe01219)
+- <img width="960" alt="Image" src="https://github.com/user-attachments/assets/59db09f5-2825-4749-b1f8-1e845fcb20ab" />
 
 4. **Checkout Page Screenshot**
 
-- ![Image](https://github.com/user-attachments/assets/e47f92f5-fe0a-4e0a-81a4-19fa4c6980af)
+- <img width="949" alt="Image" src="https://github.com/user-attachments/assets/be64b60a-f6db-444b-968b-b9d0fb27e36d" />
 
 ---
 
