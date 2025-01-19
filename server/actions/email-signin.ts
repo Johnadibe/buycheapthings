@@ -9,6 +9,7 @@ import { generateEmailVerificationToken, generateTwoFactorToken, getTwoFactorTok
 import { sendTwoFactorByTokenEmail, sendVerificationEmail } from "./email";
 import { signIn } from "../auth";
 import { AuthError } from "next-auth";
+import bcrypt from "bcrypt"
 
 const action = createSafeActionClient();
 
@@ -20,7 +21,15 @@ export const emailSignIn = action(LoginSchema, async ({ email, password, code })
 
         // check if the user exist in the database
         if (existingUser?.email !== email) {
-            return { error: "Email not found" }
+            return { error: "Email or Password Incorrect" }
+        }
+
+        if (!existingUser || typeof existingUser.password !== 'string') {
+            return { error: "Email or Password Incorrect" };
+        }
+        const passwordMatch = await bcrypt.compare(password, existingUser.password);
+        if (!passwordMatch) {
+            return { error: "Email or Password Incorrect" };
         }
 
         // check if the user is verified
