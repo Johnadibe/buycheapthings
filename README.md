@@ -86,7 +86,7 @@ Below are a few screenshots showcasing the user interface and features:
 
 1. **Home Page Screenshot**
 
-- <img width="949" alt="Image" src="https://github.com/user-attachments/assets/506acb46-e306-4f63-a3a8-a96f8995397b" />
+- ![Image](https://github.com/user-attachments/assets/3e6b6129-d6bf-42db-9502-5266f7327144)
 
 2. **Product Description/Details Screenshot**
 
