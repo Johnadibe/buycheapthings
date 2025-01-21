@@ -76,7 +76,7 @@ Welcome to **BuyCheapThings**—a sleek, full-featured e-commerce platform built
 
 ## Live Demo
 
-Check out the live application here: [BuyCheapThings Demo](https://buycheapthings.vercel.app)
+Check out the live application here: [BuyCheapThings Demo](https://www.buycheapthings.live)
 
 ---
 
