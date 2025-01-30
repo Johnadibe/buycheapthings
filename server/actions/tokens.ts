@@ -12,7 +12,7 @@ export const getVerificationTokenByEmail = async (email: string) => {
             where: eq(emailTokens.token, email)
         })
         return verificationToken
-    } catch(error) {
+    } catch (error) {
         return null
     }
 }
@@ -36,7 +36,7 @@ export const generateEmailVerificationToken = async (email: string) => {
     const verificationToken = await db.insert(emailTokens).values({
         email,
         token,
-        expires,  
+        expires,
     }).returning()
     return verificationToken
 }
@@ -45,27 +45,36 @@ export const generateEmailVerificationToken = async (email: string) => {
 export const newVerification = async (token: string) => {
     // check if we have an existing token
     const existingToken = await getVerificationTokenByEmail(token)
-    if(!existingToken) return { error: "Token not found"}
+    if (!existingToken) return { error: "Token not found" }
 
     // check if it has expired
     const hasExpired = new Date(existingToken.expires) < new Date()
 
-    if(hasExpired) return { error: "Toke has expired"}
+    if (hasExpired) return { error: "Toke has expired" }
 
     // check for our existing user
-    const existingUser = db.query.users.findFirst({
+    const existingUser = await db.query.users.findFirst({
         where: eq(users.email, existingToken.email)
     })
-    if(!existingUser) return { error: "Email does not exist" }
+    if (!existingUser) return { error: "Email does not exist" }
     // otherwise
+    // if (existingUser) {
+    //     await db.update(users).set({
+    //         emailVerified: new Date(),
+    //         // email: existingToken.email,
+    //     })
+    //         .where(eq(users.id, existingUser.id));
+    // }
+
     await db.update(users).set({
         emailVerified: new Date(),
         email: existingToken.email,
     })
+        .where(eq(users.id, existingUser.id));
 
     await db.delete(emailTokens).where(eq(emailTokens.id, existingToken.id))
 
-    return { success: "Email verified"}
+    return { success: "Email verified" }
 }
 
 // get the password reset token in the database using the token
@@ -96,26 +105,26 @@ export const getPasswordResetTokenByEmail = async (email: string) => {
 export const generatePasswordResetToken = async (email: string) => {
     try {
         // generate the token 
-    const token = crypto.randomUUID()
-    
-    // expires 
-    const expires = new Date(new Date().getTime() + 3600 * 1000)
+        const token = crypto.randomUUID()
 
-    // if we have an existing token then delete it, get password reset token by email
-    const existingToken = await getPasswordResetTokenByEmail(email)
-    if(existingToken) {
-        await db.delete(passwordResetTokens).where(eq(passwordResetTokens.id, existingToken.id))
-    }
+        // expires 
+        const expires = new Date(new Date().getTime() + 3600 * 1000)
 
-    // insert the values of the passwordresettokens in the database
-    const passwordResetToken = await db.insert(passwordResetTokens).values({
-        email,
-        token,
-        expires,
-    }).returning()
+        // if we have an existing token then delete it, get password reset token by email
+        const existingToken = await getPasswordResetTokenByEmail(email)
+        if (existingToken) {
+            await db.delete(passwordResetTokens).where(eq(passwordResetTokens.id, existingToken.id))
+        }
+
+        // insert the values of the passwordresettokens in the database
+        const passwordResetToken = await db.insert(passwordResetTokens).values({
+            email,
+            token,
+            expires,
+        }).returning()
 
         // return the password reset token
-    return passwordResetToken 
+        return passwordResetToken
     } catch {
         return null
     }
@@ -123,7 +132,7 @@ export const generatePasswordResetToken = async (email: string) => {
 
 // 
 export const getTwoFactorTokenByEmail = async (email: string) => {
-     try {
+    try {
         const twoFactorToken = await db.query.twoFactorTokens.findFirst({
             where: eq(twoFactorTokens.email, email)
         })
@@ -149,26 +158,26 @@ export const getTwoFactorTokenByToken = async (token: string) => {
 export const generateTwoFactorToken = async (email: string) => {
     try {
         // generate the token 
-    const token = crypto.randomInt(100_000, 1_000_000).toString()
-    
-    // expires 
-    const expires = new Date(new Date().getTime() + 3600 * 1000)
+        const token = crypto.randomInt(100_000, 1_000_000).toString()
 
-    // if we have an existing token then delete it, get two factor token by email
-    const existingToken = await getTwoFactorTokenByEmail(email)
-    if(existingToken) {
-        await db.delete(twoFactorTokens).where(eq(twoFactorTokens.id, existingToken.id))
-    }
+        // expires 
+        const expires = new Date(new Date().getTime() + 3600 * 1000)
 
-    // insert the values of the twofactortokens in the database
-    const twoFactorToken = await db.insert(twoFactorTokens).values({
-        email,
-        token,
-        expires,
-    }).returning()
+        // if we have an existing token then delete it, get two factor token by email
+        const existingToken = await getTwoFactorTokenByEmail(email)
+        if (existingToken) {
+            await db.delete(twoFactorTokens).where(eq(twoFactorTokens.id, existingToken.id))
+        }
+
+        // insert the values of the twofactortokens in the database
+        const twoFactorToken = await db.insert(twoFactorTokens).values({
+            email,
+            token,
+            expires,
+        }).returning()
 
         // return the password reset token
-    return twoFactorToken 
+        return twoFactorToken
     } catch {
         return null
     }
